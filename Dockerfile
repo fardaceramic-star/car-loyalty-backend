@@ -42,7 +42,7 @@ COPY . .
 # ۶. نصب وابستگی‌های Laravel
 # ==========================================
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader -vvv
 
 # ==========================================
 # ۷. تنظیم مجوزها
