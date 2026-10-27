@@ -1,6 +1,8 @@
 FROM php:8.2-fpm
 
-# نصب وابستگی‌های سیستمی (شامل libpq-dev برای PostgreSQL)
+# ==========================================
+# ۱. نصب وابستگی‌های سیستمی
+# ==========================================
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,40 +14,58 @@ RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     libpq-dev \
+    libzip-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# نصب افزونه‌های PHP (شامل pdo_pgsql)
+# ==========================================
+# ۲. نصب افزونه‌های PHP
+# ==========================================
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
 
-# نصب Composer
+# ==========================================
+# ۳. نصب Composer
+# ==========================================
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تنظیم پوشه کاری
+# ==========================================
+# ۴. تنظیم پوشه کاری
+# ==========================================
 WORKDIR /var/www/html
 
-# کپی فایل‌های پروژه
+# ==========================================
+# ۵. کپی فایل‌های پروژه
+# ==========================================
 COPY . .
 
-# نصب وابستگی‌ها (با کاربر root)
+# ==========================================
+# ۶. نصب وابستگی‌های Laravel
+# ==========================================
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader
 
-# تنظیم مجوزها
+# ==========================================
+# ۷. تنظیم مجوزها
+# ==========================================
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# کپی فایل‌های کانفیگ Nginx و Supervisor
+# ==========================================
+# ۸. کپی فایل‌های کانفیگ Nginx و Supervisor
+# ==========================================
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# اجرای Migration و کش (اختیاری - می‌توانید به start.sh منتقل کنید)
+# ==========================================
+# ۹. بهینه‌سازی Laravel (اختیاری)
+# ==========================================
 RUN php artisan config:cache
 RUN php artisan route:cache
 
-# پورت
+# ==========================================
+# ۱۰. پورت و دستور شروع
+# ==========================================
 EXPOSE 80
 
-# دستور شروع
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
