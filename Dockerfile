@@ -31,3 +31,4 @@ RUN php artisan route:cache
 
 # اجرای اسکریپت شروع
 CMD ["sh", "/var/www/html/start.sh"]
+
