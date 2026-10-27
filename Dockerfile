@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     libpq-dev \
     libzip-dev \
+    libicu-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
