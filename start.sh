@@ -27,22 +27,26 @@ echo "Seeding products..."
 php artisan db:seed --class=ProductSeeder --force
 
 # ==========================================
-# ۵. کش کردن تنظیمات (بعد از پاکسازی)
+# ۵. ساخت کاربر ادمین (فقط اگر وجود نداشته باشد)
+# ==========================================
+echo "Creating admin user (if not exists)..."
+php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin@yahoo.com'], ['name' => 'مدیر', 'password' => bcrypt('Aa123456')]);"
+
+# ==========================================
+# ۶. کش کردن تنظیمات
 # ==========================================
 echo "Caching config and routes..."
 php artisan config:cache
 php artisan route:cache
 
 # ==========================================
-# ۶. اجرای PHP-FPM
+# ۷. اجرای PHP-FPM
 # ==========================================
 echo "Starting PHP-FPM..."
-echo "Creating admin user..."
-php artisan tinker --execute="\App\Models\User::create(['name' => 'مدیر', 'email' => 'admin@yahoo.com', 'password' => bcrypt('Aa123456')]);"
 php-fpm -D
 
 # ==========================================
-# ۷. اجرای Nginx
+# ۸. اجرای Nginx
 # ==========================================
 echo "Starting Nginx..."
 nginx -g 'daemon off;'
