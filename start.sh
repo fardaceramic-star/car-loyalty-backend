@@ -37,7 +37,6 @@ php artisan route:cache
 # ۶. اجرای PHP-FPM
 # ==========================================
 echo "Starting PHP-FPM..."
-php artisan make:filament-user --name="مدیر" --email="admin@yahoo.com" --password="Aa123456" --force
 php-fpm -D
 
 # ==========================================
