@@ -25,10 +25,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-# کش کردن تنظیمات لاراول
-RUN php artisan config:cache
-RUN php artisan route:cache
-
 # اجرای اسکریپت شروع
 CMD ["sh", "/var/www/html/start.sh"]
 

@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # ==========================================
-# ۱. تنظیم مجوزهای پوشه‌های storage و bootstrap/cache
+# ۱. تنظیم مجوزها
 # ==========================================
 echo "Setting permissions..."
 chmod -R 775 storage bootstrap/cache
 
 # ==========================================
-# ۲. پاک کردن کش‌های قبلی (برای جلوگیری از خطاهای ناشی از کش)
+# ۲. پاک کردن کش‌های قبلی
 # ==========================================
 echo "Clearing caches..."
 php artisan config:clear
@@ -15,31 +15,32 @@ php artisan route:clear
 php artisan view:clear
 
 # ==========================================
-# ۳. اجرای Migration ها (ساخت جداول)
+# ۳. اجرای Migration ها
 # ==========================================
 echo "Running migrations..."
 php artisan migrate --force
 
 # ==========================================
-# ۴. اجرای Seeder (افزودن محصولات نمونه)
+# ۴. اجرای Seeder
 # ==========================================
 echo "Seeding products..."
 php artisan db:seed --class=ProductSeeder --force
 
 # ==========================================
-# ۵. بررسی فعال بودن افزونه intl (برای دیباگ)
+# ۵. کش کردن تنظیمات (بعد از پاکسازی)
 # ==========================================
-echo "Checking intl extension..."
-php -m | grep intl || echo "WARNING: intl extension is not enabled!"
+echo "Caching config and routes..."
+php artisan config:cache
+php artisan route:cache
 
 # ==========================================
-# ۶. اجرای PHP-FPM در پس‌زمینه
+# ۶. اجرای PHP-FPM
 # ==========================================
 echo "Starting PHP-FPM..."
 php-fpm -D
 
 # ==========================================
-# ۷. اجرای Nginx در پیش‌زمینه (کانتینر را زنده نگه می‌دارد)
+# ۷. اجرای Nginx
 # ==========================================
 echo "Starting Nginx..."
 nginx -g 'daemon off;'
