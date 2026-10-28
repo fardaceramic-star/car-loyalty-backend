@@ -5,7 +5,6 @@
 # ==========================================
 echo "Setting permissions..."
 chmod -R 775 storage bootstrap/cache
-chmod -R 777 storage
 
 # ==========================================
 # ۲. پاک کردن کش‌ها
@@ -28,7 +27,7 @@ echo "Seeding products..."
 php artisan db:seed --class=ProductSeeder --force
 
 # ==========================================
-# ۵. ساخت کاربر ادمین (در صورت نیاز)
+# ۵. ساخت کاربر ادمین
 # ==========================================
 echo "Creating admin user (if not exists)..."
 php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin@yahoo.com'], ['name' => 'مدیر', 'password' => bcrypt('Aa123456')]);"
@@ -47,7 +46,7 @@ php artisan config:cache
 php artisan route:cache
 
 # ==========================================
-# ۸. اجرای PHP-FPM
+# ۸. اجرای PHP-FPM روی Unix Socket (نه TCP)
 # ==========================================
 echo "Starting PHP-FPM..."
 php-fpm -D
