@@ -33,20 +33,26 @@ echo "Creating admin user (if not exists)..."
 php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin@yahoo.com'], ['name' => 'مدیر', 'password' => bcrypt('Aa123456')]);"
 
 # ==========================================
-# ۶. کش کردن تنظیمات
+# ۶. انتشار فایل‌های استاتیک Filament
+# ==========================================
+echo "Publishing Filament assets..."
+php artisan filament:assets
+
+# ==========================================
+# ۷. کش کردن تنظیمات
 # ==========================================
 echo "Caching config and routes..."
 php artisan config:cache
 php artisan route:cache
 
 # ==========================================
-# ۷. اجرای PHP-FPM
+# ۸. اجرای PHP-FPM
 # ==========================================
 echo "Starting PHP-FPM..."
 php-fpm -D
 
 # ==========================================
-# ۸. اجرای Nginx
+# ۹. اجرای Nginx
 # ==========================================
 echo "Starting Nginx..."
 nginx -g 'daemon off;'
