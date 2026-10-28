@@ -37,8 +37,7 @@ php artisan route:cache
 # ۶. اجرای PHP-FPM
 # ==========================================
 echo "Starting PHP-FPM..."
-echo "Creating admin user..."
-php artisan tinker --execute="\App\Models\User::create(['name' => 'مدیر', 'email' => 'admin@yahoo.com', 'password' => bcrypt('Aa123456')]);"
+php artisan make:filament-user --name="مدیر" --email="admin@yahoo.com" --password="Aa123456" --force
 php-fpm -D
 
 # ==========================================
