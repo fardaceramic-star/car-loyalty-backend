@@ -7,7 +7,7 @@ echo "Setting permissions..."
 chmod -R 775 storage bootstrap/cache
 
 # ==========================================
-# ۲. پاک کردن کش‌های قبلی
+# ۲. پاک کردن کش‌ها
 # ==========================================
 echo "Clearing caches..."
 php artisan config:clear
@@ -27,7 +27,7 @@ echo "Seeding products..."
 php artisan db:seed --class=ProductSeeder --force
 
 # ==========================================
-# ۵. ساخت کاربر ادمین (فقط اگر وجود نداشته باشد)
+# ۵. ساخت کاربر ادمین (در صورت نیاز)
 # ==========================================
 echo "Creating admin user (if not exists)..."
 php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin@yahoo.com'], ['name' => 'مدیر', 'password' => bcrypt('Aa123456')]);"
@@ -36,7 +36,7 @@ php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin
 # ۶. انتشار فایل‌های استاتیک Filament
 # ==========================================
 echo "Publishing Filament assets..."
-php artisan vendor:publish --tag=filament-assets --force
+php artisan filament:assets
 
 # ==========================================
 # ۷. کش کردن تنظیمات
