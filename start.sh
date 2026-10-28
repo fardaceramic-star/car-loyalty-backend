@@ -36,7 +36,7 @@ php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin
 # ۶. انتشار فایل‌های استاتیک Filament
 # ==========================================
 echo "Publishing Filament assets..."
-php artisan filament:assets
+php artisan vendor:publish --tag=filament-assets --force
 
 # ==========================================
 # ۷. کش کردن تنظیمات
