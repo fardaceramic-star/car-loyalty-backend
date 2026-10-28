@@ -16,6 +16,7 @@ php artisan db:seed --class=ProductSeeder --force
 # ۳. اجرای PHP-FPM در پس‌زمینه
 # ==========================================
 echo "Starting PHP-FPM..."
+chmod -R 775 storage bootstrap/cache
 php-fpm -D
 
 # ==========================================
