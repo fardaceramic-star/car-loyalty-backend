@@ -5,6 +5,7 @@
 # ==========================================
 echo "Setting permissions..."
 chmod -R 775 storage bootstrap/cache
+chmod -R 777 storage
 
 # ==========================================
 # ۲. پاک کردن کش‌ها
