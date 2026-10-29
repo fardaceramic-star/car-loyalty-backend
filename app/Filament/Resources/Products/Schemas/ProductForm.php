@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -44,13 +43,11 @@ class ProductForm
                     ->label('توضیحات')
                     ->columnSpanFull(),
 
-                FileUpload::make('image_url')
-                    ->label('تصویر محصول')
-                    ->image()
-                    ->disk('public')
-                    ->directory('products')
-                    ->visibility('public')
-                    ->maxSize(2048)
+                TextInput::make('image_url')
+                    ->label('لینک تصویر محصول')
+                    ->url()
+                    ->maxLength(500)
+                    ->helperText('لینک مستقیم عکس (مثلاً از Filestack یا ImgBB) را وارد کنید.')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
