@@ -24,45 +24,53 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # ==========================================
-# ۳. نصب Composer
+# ۳. تنظیم PHP-FPM برای مصرف حافظه بهینه
+# ==========================================
+RUN echo "[www]" > /usr/local/etc/php-fpm.d/zz-custom.conf \
+    && echo "pm = static" >> /usr/local/etc/php-fpm.d/zz-custom.conf \
+    && echo "pm.max_children = 1" >> /usr/local/etc/php-fpm.d/zz-custom.conf \
+    && echo "pm.max_requests = 500" >> /usr/local/etc/php-fpm.d/zz-custom.conf
+
+# ==========================================
+# ۴. نصب Composer
 # ==========================================
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # ==========================================
-# ۴. تنظیم پوشه کاری
+# ۵. تنظیم پوشه کاری
 # ==========================================
 WORKDIR /var/www/html
 
 # ==========================================
-# ۵. کپی فایل‌های پروژه
+# ۶. کپی فایل‌های پروژه
 # ==========================================
 COPY . .
 
 # ==========================================
-# ۶. نصب وابستگی‌های Laravel
+# ۷. نصب وابستگی‌های Laravel
 # ==========================================
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader
 
 # ==========================================
-# ۷. تنظیم مجوزها
+# ۸. تنظیم مجوزها
 # ==========================================
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # ==========================================
-# ۸. کپی فایل‌های کانفیگ Nginx
+# ۹. کپی فایل‌های کانفیگ Nginx
 # ==========================================
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
 # ==========================================
-# ۹. کش کردن تنظیمات لاراول
+# ۱۰. کش کردن تنظیمات لاراول (کاهش مصرف حافظه)
 # ==========================================
 RUN php artisan config:cache
 RUN php artisan route:cache
 
 # ==========================================
-# ۱۰. پورت و دستور شروع
+# ۱۱. پورت و دستور شروع
 # ==========================================
 EXPOSE 80
 
